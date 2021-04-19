@@ -1,5 +1,7 @@
+from framework.ui.elements.base import Item
 
-class BasePage:
+
+class BasePage(Item):
     URL = None
 
     def __init__(self, infra):
@@ -9,11 +11,7 @@ class BasePage:
             infra: infrastructure described in BaseCase class
 
         """
-        self._do = infra
-
-    @property
-    def do(self):
-        return self._do
+        super().__init__(infra)
 
     def open(self):
-        self.do.opent(self.URL)
+        self.do.open(self.URL)
