@@ -1,14 +1,15 @@
 from framework.ui.pages.base_page import BasePage
+from framework.ui.elements.base import ButtonWithText, EditableTextField, TextLabel, ButtonWithIcon
 
 
 class LoginPage(BasePage):
     URL = 'https://www.saucedemo.com/'
-    USER_NAME_ENTRY = '#user-name'
+    LOGIN_ENTRY = '#user-name'
     PASSWORD_ENTRY = '#password'
-    SUBMIT_BUTTON = 'input[type="submit"]'
+    # SUBMIT_BUTTON = 'input[type="submit"]'
     LOGIN_BUTTON = '#login-button'
-    LOGIN_ERROR_BUTTON = 'button.error-button'
-    LOGIN_ERROR_TEXT = 'h3[data-test="error"]'
+    LOGIN_ERROR_BUTTON = "button.error-button"
+    LOGIN_ERROR_TEXT = 'div.error-message-container.error'
 
     def __init__(self, infra):
         """Page Object class for Login Page
@@ -19,21 +20,20 @@ class LoginPage(BasePage):
 
     @property
     def login_field(self):
-        return self.do.wait_for_element_visible(self.USER_NAME_ENTRY)
+        return EditableTextField(self.do, self.LOGIN_ENTRY)
 
     @property
     def password_field(self):
-        return self.do.wait_for_element_visible(self.PASSWORD_ENTRY)
+        return EditableTextField(self.do, self.PASSWORD_ENTRY)
 
     @property
     def login_button(self):
-        return self.do.wait_for_element_visible(self.LOGIN_BUTTON)
+        return ButtonWithText(self.do, self.LOGIN_BUTTON)
 
-    def type_login(self, text):
-        self.do.type(self.USER_NAME_ENTRY, text)
+    @property
+    def error_message(self):
+        return TextLabel(self.do, self.LOGIN_ERROR_TEXT)
 
-    def type_password(self, text):
-        self.do.type(self.PASSWORD_ENTRY, text)
-
-    def submit(self):
-        self.do.click(self.LOGIN_BUTTON)
+    @property
+    def error_button(self):
+        return ButtonWithIcon(self.do, self.LOGIN_ERROR_BUTTON)
