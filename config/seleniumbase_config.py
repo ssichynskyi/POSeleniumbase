@@ -6,8 +6,8 @@ change the values here and add "--settings=custom_settings.py" when running.
 # Default timeout values for waiting for page elements to appear.
 MINI_TIMEOUT = 2
 SMALL_TIMEOUT = 5
-LARGE_TIMEOUT = 10
-EXTREME_TIMEOUT = 30
+LARGE_TIMEOUT = 8
+EXTREME_TIMEOUT = 12
 
 # If False, only logs from the most recent test run will be saved.
 ARCHIVE_EXISTING_LOGS = False
