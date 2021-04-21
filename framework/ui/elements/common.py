@@ -1,29 +1,34 @@
-from framework.ui.elements.base import UIElement, Clickable, Textual, Checkable
+from framework.ui.elements.base import ButtonWithIcon, UIElement
+from selenium.webdriver.common.by import By
 
 
-class MenuButton(UIElement, Clickable):
+class MenuButton(ButtonWithIcon):
     LOCATOR = '#react-burger-menu-btn'
 
-    def __init__(self, infra):
-        super().__init__(infra, self.LOCATOR)
+    def __init__(self, infra, locator=None, by=By.CSS_SELECTOR):
+        if locator is None:
+            locator = self.LOCATOR
+        super().__init__(infra, locator, by)
 
 
 class MainLogo(UIElement):
     LOCATOR = '#react-burger-menu-btn'
 
-    def __init__(self, infra):
-        super().__init__(infra, self.LOCATOR)
+    def __init__(self, infra, locator=None, by=By.CSS_SELECTOR):
+        if locator is None:
+            locator = self.LOCATOR
+        super().__init__(infra, locator, by)
 
 
-class ShoppingCart(UIElement, Clickable):
+class ShoppingCart(ButtonWithIcon):
     LOCATOR = '#shopping_cart_container'
+    TEXT = '#shopping_cart_container > a > span.shopping_cart_badge'
 
-    def __init__(self, infra):
-        super().__init__(infra, self.LOCATOR)
+    def __init__(self, infra, locator=None, by=By.CSS_SELECTOR):
+        if locator is None:
+            locator = self.LOCATOR
+        super().__init__(infra, locator, by)
 
-
-class FilterMenu(UIElement, Clickable):
-    LOCATOR = 'div.right_component > span > select'
-
-    def __init__(self, infra):
-        super().__init__(infra, self.LOCATOR)
+    @property
+    def text(self):
+        return self.do.get_text(self.TEXT)
