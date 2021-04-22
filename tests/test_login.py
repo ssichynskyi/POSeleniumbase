@@ -1,18 +1,19 @@
 from pytest import mark
 from seleniumbase import BaseCase
-from framework.actions.common import open_and_login, logout
+from framework.actions.common import open_and_login, logout, login_as_normal_user
 from framework.ui.pages.login_page import LoginPage
 from framework.utilities.credentials_helper import normal_user
 
 
 class Logins(BaseCase):
+    """Test cases related to login-logout procedures"""
 
     def test_successful_login(self):
-        page = open_and_login(self, normal_user)
+        page = login_as_normal_user(self)
         self.assertEqual(page.URL, self.get_current_url())
 
     def test_logout(self):
-        open_and_login(self, normal_user)
+        login_as_normal_user(self)
         logout(self)
         self.assertEqual(LoginPage.URL, self.get_current_url())
 
