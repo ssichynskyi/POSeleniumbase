@@ -9,7 +9,7 @@ class BasePage(Item):
 
         Explanation:
             It's assumed that the main idea of Page Objects is to locate
-            web elements and provide them to user 'as is' and provide
+            web elements, provide them to user 'as is' and provide
             some generic functions like open().
 
             You may think that it makes sense to add additional methods in PO
@@ -32,13 +32,15 @@ class BasePage(Item):
             write more code than necessary. Still, you are free to do so...
 
         Args:
-            infra: infrastructure described in BaseCase class
+            infra: object of Seleniumbase BaseCase class
 
         """
         super().__init__(infra)
 
     def open(self):
+        """Opens page by it's URL"""
         self.do.open(self.URL)
 
     def refresh(self):
+        """Refreshes this page"""
         self.do.refresh()

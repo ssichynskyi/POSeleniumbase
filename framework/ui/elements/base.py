@@ -1,5 +1,20 @@
-from selenium.webdriver.common.by import By
+"""Module contains base classes for web elements.
+
+Foreword:
+    It's assumed that all other web elements derived from the classes from this module
+    Mixins are not self-sufficient objects. They shall be used only for inheritance.
+    Treat mixin like an interface.
+    When creating a new class, it's ok to inherit many mixins. No SOLID principles
+    are affected by this. Still, make sure that you derive from only one non-mixing class.
+
+General rules:
+    - when creating a new web element (the entity which can have a meaningful locator),
+    use UIElement and necessary number of mixins.
+    - when dealing with more abstract entities like lists of similar items, i
+"""
 from abc import abstractmethod
+from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 
 
 class Item:
@@ -50,12 +65,15 @@ class EditableTextMixin:
     """Mixin which provides feature of write text to child class"""
 
     def clear(self):
+        """Clears text box field from all text"""
         self.do.clear(self.locator, self.by)
 
     def add_text(self, text):
+        """Appends new text to the end of the text in text box"""
         self.do.add_text(self.locator, text, self.by)
 
     def write(self, text):
+        """Rewrites the given text in text box"""
         self.do.write(self.locator, text, self.by)
 
 
@@ -63,12 +81,15 @@ class CheckableMixin:
     """Mixin which provides feature of check/uncheck for child class"""
 
     def check(self):
+        """Checks checkbox/radio button"""
         self.do.select_if_unselected(self.locator, self.by)
 
     def uncheck(self):
+        """Unchecks checkbox/radio button"""
         self.do.unselect_if_selected(self.locator, self.by)
 
     def checked(self):
+        """Examines checkbox/radio button for status"""
         self.do.is_checked(self.locator, self.by)
 
 
@@ -80,8 +101,8 @@ class TextualMixin:
         return self.do.get_text(self.locator, self.by)
 
 
-class Selectable:
-    """Mixin which provides navigation features in <select> menu"""
+class SelectableMixin:
+    """Mixin which provides navigation features in <select> / <options> menu"""
 
     def _select_option_by_text(self, text):
         self.do.select_option_by_text(self.locator, text, self.by)
@@ -97,9 +118,16 @@ class Selectable:
 
 
 class ButtonWithText(UIElement, ClickableMixin, TextualMixin):
-    """Button with text label"""
 
     def __init__(self, infra, locator, by=By.CSS_SELECTOR):
+        """Button with text label
+
+        Args:
+            infra: Seleniumbase BaseCase object
+            locator: string representation of locator
+            by: Selenium By object
+
+        """
         super().__init__(infra, locator, by)
 
 
@@ -124,8 +152,8 @@ class TextLabel(UIElement, TextualMixin):
         super().__init__(infra, locator, by)
 
 
-class SelectMenu(UIElement, Selectable):
-    """Selectable menu"""
+class SelectMenu(UIElement, SelectableMixin):
+    """Menu made from <select> / <option> tags"""
 
     def __init__(self, infra, locator, by=By.CSS_SELECTOR):
         super().__init__(infra, locator, by)
@@ -133,6 +161,17 @@ class SelectMenu(UIElement, Selectable):
 
 class BaseListElement(Item):
     def __init__(self, infra):
+        """Base class for list of identical items
+
+        Remark:
+            shall not be used for lists made of <select>/<option> tags.
+            Please use object inherited from SelectableMixin
+            Shall be used for lists of identical items made by <div>, <li>, <ul>
+
+        Args:
+            infra: Seleniumbase BaseCase object
+
+        """
         super().__init__(infra)
 
     @property
@@ -211,7 +250,17 @@ class BaseListOfElements(Item):
         return self._items[index]
 
 
-def generate_css_selector(infra, web_element):
+def generate_css_selector(infra, web_element: WebElement) -> str:
+    """Generates the css selector from a given Selenium WebElement
+
+    Args:
+        infra: Seleniumbase BaseCase object
+        web_element: object of type Selenium WebElement
+
+    Returns:
+        css selector as string
+
+    """
     JS_BUILD_CSS_SELECTOR = \
         "for(var e=arguments[0],n=[],i=function(e,n){if(!e||!n)return 0;f" + \
         "or(var i=0,a=e.length;a>i;i++)if(-1==n.indexOf(e[i]))return 0;re" + \
