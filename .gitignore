@@ -130,5 +130,7 @@ dmypy.json
 
 # IDE
 .idea/
+
 # Special cases for this project
 tests/examples/
+seleniumbase_config.py
