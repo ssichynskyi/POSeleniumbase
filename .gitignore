@@ -133,4 +133,4 @@ dmypy.json
 
 # Special cases for this project
 tests/examples/
-seleniumbase_config.py
+config/seleniumbase_config.py
