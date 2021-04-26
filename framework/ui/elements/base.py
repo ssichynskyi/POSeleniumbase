@@ -217,9 +217,6 @@ class BaseListOfElements(Item):
             element.update_locators(selector)
         return elements
 
-    def get_by_index(self, index):
-        return self._items[index]
-
     def get_by_property_value(self, prop_call: str, value, full_match=True):
 
         for item in self._items:
