@@ -161,7 +161,7 @@ class SelectMenu(UIElement, SelectableMixin):
 
 class BaseListElement(Item):
     def __init__(self, infra):
-        """Base class for list of identical items
+        """Base class for the element in the list of identical items
 
         Remark:
             shall not be used for lists made of <select>/<option> tags.
@@ -188,23 +188,26 @@ class BaseListElement(Item):
 
         Idea:
             Make a unique locator from non-unique locator of member and
-            unique prefix (which supposed to be a unique locator of this web element
+            unique prefix (which supposed to be a unique locator of this web element)
 
         Args:
               prefix: string representing a unique css selector of this instance
+
         """
         for member in self.member_locators:
             self.__setattr__(member, f'{prefix} > {self.__getattribute__(member)}')
 
 
 class BaseListOfElements(Item):
-    """List of elements of the same class"""
 
-    def __init__(
-            self,
-            infra,
-            element_type: type,
-    ):
+    def __init__(self, infra, element_type: type):
+        """List of elements of the same class
+
+        Args:
+            infra: Seleniumbase BaseCase object
+            element_type: class of the element. Expected subclass of BaseListElement
+
+        """
         super().__init__(infra)
         self._element_type = element_type
         self._items = self._get_items(By.CSS_SELECTOR)
@@ -218,7 +221,18 @@ class BaseListOfElements(Item):
         return elements
 
     def get_by_property_value(self, prop_call: str, value, full_match=True):
+        """Get the element of the list by Selenium WebElement property value
 
+        Args:
+            prop_call: str represents the full path to a ppty of Selenium WebElement
+            value: value of the property to look for
+            full_match: if True, only full match is recognized. Otherwise value only
+                need to be present inside property i.e.
+
+        Returns:
+            List Element as indicated by element_type parameter.
+            It shall be a subclass of BaseListElement
+        """
         for item in self._items:
             prop = item
             try:
